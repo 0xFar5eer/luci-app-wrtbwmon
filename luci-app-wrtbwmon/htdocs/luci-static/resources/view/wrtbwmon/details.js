@@ -178,6 +178,33 @@ function parseCustomDate(dateStr) {
 	return new Date(Date.UTC(year, month, day, hour, minute, second));
 }
 
+function formatRelativeTime(date) {
+	// Format relative time like "1d 16h 15m 1s ago" or "6m 55s ago"
+	// date is already in UTC from parseCustomDate, compare with current UTC time
+	var now = new Date();
+	var diffMs = now.getTime() - date.getTime();
+	
+	if (diffMs < 0) return 'just now';
+	
+	var seconds = Math.floor(diffMs / 1000);
+	var minutes = Math.floor(seconds / 60);
+	var hours = Math.floor(minutes / 60);
+	var days = Math.floor(hours / 24);
+	
+	seconds = seconds % 60;
+	minutes = minutes % 60;
+	hours = hours % 24;
+	
+	var parts = [];
+	if (days > 0) parts.push(days + 'd');
+	if (hours > 0) parts.push(hours + 'h');
+	if (minutes > 0) parts.push(minutes + 'm');
+	if (seconds > 0 && days === 0) parts.push(seconds + 's'); // Only show seconds if less than a day
+	
+	if (parts.length === 0) return 'just now';
+	return parts.join(' ') + ' ago';
+}
+
 function getDSLBandwidth() {
 	return callLuciDSLStatus().then(function(res) {
 		return {
