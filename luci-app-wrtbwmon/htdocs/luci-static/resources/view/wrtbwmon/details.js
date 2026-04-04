@@ -509,6 +509,8 @@ function updateTable(tb, values, placeholder, settings) {
 
 		childTD = newNode.firstElementChild;
 		childTD.title = formData[i].slice(-1);
+		// Store hostname for later use
+		var hostname = formData[i][9] || 'N/A';
 		for (var j = 0; j < tbTitle.childElementCount; j++, childTD = childTD.nextElementSibling) {
 			switch (j) {
 				case 2:
@@ -529,7 +531,12 @@ function updateTable(tb, values, placeholder, settings) {
 					childTD.textContent = formattedDate + ' (' + relativeTime + ')';
 					break;
 				default:
-					childTD.textContent = formData[i][j];
+					if (j === 0) {
+						// Column 0 is Client (IP), show with hostname
+						childTD.textContent = formData[i][j] + ' (' + hostname + ')';
+					} else {
+						childTD.textContent = formData[i][j];
+					}
 			}
 		}
 		fragment.appendChild(newNode);
