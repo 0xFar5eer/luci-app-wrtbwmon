@@ -145,9 +145,13 @@ function formatSpeed(speed, useBits, useMultiple) {
 }
 
 function formatDate(d) {
-	var Y = d.getFullYear(), M = d.getMonth() + 1, D = d.getDate(),
-	    hh = d.getHours(), mm = d.getMinutes(), ss = d.getSeconds();
-	return '%04d/%02d/%02d %02d:%02d:%02d'.format(Y, M, D, hh, mm, ss);
+	// Format date in PHT (UTC+8)
+	var PHT_OFFSET = 8 * 60; // 8 hours in minutes
+	var phtTime = new Date(d.getTime() + PHT_OFFSET * 60 * 1000);
+	
+	var Y = phtTime.getUTCFullYear(), M = phtTime.getUTCMonth() + 1, D = phtTime.getUTCDate(),
+	    hh = phtTime.getUTCHours(), mm = phtTime.getUTCMinutes(), ss = phtTime.getUTCSeconds();
+	return '%04d/%02d/%02d %02d:%02d:%02d PHT'.format(Y, M, D, hh, mm, ss);
 }
 
 function parseCustomDate(dateStr) {
