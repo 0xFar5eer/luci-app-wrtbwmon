@@ -222,7 +222,7 @@ function parseDatabase(raw, hosts, showZero, hideMACs) {
 	var values = [],
 	    totals = [0, 0, 0, 0, 0],
 	    rows = raw.trim().split(/\r?\n|\r/g),
-	    rowIndex = [1, 0, 3, 4, 5, 6, 7, 8, 9, 0];
+	    rowIndex = [1, 0, 3, 4, 3, 4, 5, 6, 7, 9];
 
 	rows.shift();
 
