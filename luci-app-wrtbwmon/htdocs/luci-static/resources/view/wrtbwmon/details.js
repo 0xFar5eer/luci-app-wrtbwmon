@@ -302,7 +302,7 @@ function parseDatabase(raw, hosts, showZero, hideMACs) {
 function parseDefaultSettings(file) {
 	var defaultColumns = ['thClient', 'thDownload', 'thUpload', 'thTotalDown', 'thTotalUp', 'thTotal'],
 	    keylist = ['protocol', 'interval', 'showColumns', 'showZero', 'useBits', 'useMultiple', 'useDSL', 'upstream', 'downstream', 'hideMACs'],
-	    valuelist = ['ipv4', '5', defaultColumns, true, false, '1000', false, '100', '100', []];
+	    valuelist = ['ipv4', '5', defaultColumns, true, false, '1000', false, '1000', '1000', []];
 
 	return fs.read_direct(file, 'json').then(function(oldSettings) {
 		var settings = {};
