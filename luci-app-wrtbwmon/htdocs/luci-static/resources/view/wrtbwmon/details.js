@@ -522,7 +522,11 @@ function updateTable(tb, values, placeholder, settings) {
 					break;
 				case 7:
 				case 8:
-					childTD.textContent = formatDate(new Date(formData[i][j] * 1000));
+					var dateObj = parseCustomDate(formData[i][j]);
+					var formattedDate = formatDate(dateObj);
+					var relativeTime = formatRelativeTime(dateObj);
+					// Show relative time for both First Seen and Last Seen
+					childTD.textContent = formattedDate + ' (' + relativeTime + ')';
 					break;
 				default:
 					childTD.textContent = formData[i][j];
