@@ -573,7 +573,7 @@ function updateTable(tb, values, placeholder, settings) {
 					break;
 				case 2:
 				case 3:
-					newNode.children[j].textContent = formatSpeed(values[1][j - 2], settings.useBits, settings.useMultiple);
+					newNode.children[j].textContent = formatSize(values[1][j - 2], settings.useBits, settings.useMultiple);
 					break;
 				case 4:
 				case 5:
