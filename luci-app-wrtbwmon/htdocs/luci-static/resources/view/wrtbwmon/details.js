@@ -170,7 +170,8 @@ function parseCustomDate(dateStr) {
 	var minute = parseInt(timeParts[1]);
 	var second = parseInt(timeParts[2]);
 
-	return new Date(year, month, day, hour, minute, second);
+	// Parse as UTC since server is in GMT
+	return new Date(Date.UTC(year, month, day, hour, minute, second));
 }
 
 function getDSLBandwidth() {
