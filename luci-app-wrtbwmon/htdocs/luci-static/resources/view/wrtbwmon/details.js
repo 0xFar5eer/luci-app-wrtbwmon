@@ -515,7 +515,8 @@ function updateTable(tb, values, placeholder, settings) {
 			switch (j) {
 				case 2:
 				case 3:
-					childTD.textContent = formatSpeed(formData[i][j], settings.useBits, settings.useMultiple);
+					// Columns 2 and 3 are cumulative Download/Upload, not speeds
+					childTD.textContent = formatSize(formData[i][j], settings.useBits, settings.useMultiple);
 					break;
 				case 4:
 				case 5:
