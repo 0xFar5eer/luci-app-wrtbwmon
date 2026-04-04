@@ -150,6 +150,29 @@ function formatDate(d) {
 	return '%04d/%02d/%02d %02d:%02d:%02d'.format(Y, M, D, hh, mm, ss);
 }
 
+function parseCustomDate(dateStr) {
+	// Parse format: DD-MM-YYYY_HH:MM:SS (server time is GMT)
+	if (!dateStr || dateStr === "0") return new Date(0);
+
+	var parts = dateStr.split("_");
+	if (parts.length !== 2) return new Date(0);
+
+	var dateParts = parts[0].split("-");
+	var timeParts = parts[1].split(":");
+
+	if (dateParts.length !== 3 || timeParts.length !== 3) return new Date(0);
+
+	// Format: DD-MM-YYYY HH:MM:SS in GMT
+	var day = parseInt(dateParts[0]);
+	var month = parseInt(dateParts[1]) - 1; // JavaScript months are 0-indexed
+	var year = parseInt(dateParts[2]);
+	var hour = parseInt(timeParts[0]);
+	var minute = parseInt(timeParts[1]);
+	var second = parseInt(timeParts[2]);
+
+	return new Date(year, month, day, hour, minute, second);
+}
+
 function getDSLBandwidth() {
 	return callLuciDSLStatus().then(function(res) {
 		return {
