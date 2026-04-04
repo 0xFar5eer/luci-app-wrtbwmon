@@ -675,7 +675,7 @@ return view.extend({
 								}, settings.interval))
 					])
 				]),
-				E('div', { 'id': 'progressbar_panel' }, [
+				E('div', { 'id': 'progressbar_panel', 'style': 'display: none;' }, [
 					E('div', {}, [
 						E('label', {},  _('Downstream:')),
 						E('div', {
