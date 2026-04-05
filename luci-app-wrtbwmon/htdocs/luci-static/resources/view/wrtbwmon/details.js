@@ -155,9 +155,33 @@ function formatDate(d) {
 }
 
 function parseCustomDate(dateStr) {
-	// Parse format: DD-MM-YYYY_HH:MM:SS (server time is GMT)
+	// Parse SQLite datetime format: YYYY-MM-DD HH:MM:SS
+	// Also support legacy format: DD-MM-YYYY_HH:MM:SS
 	if (!dateStr || dateStr === "0") return new Date(0);
 
+	// Check if it's SQLite format (YYYY-MM-DD HH:MM:SS)
+	if (dateStr.indexOf(' ') > 0 && dateStr.indexOf('-') > 0) {
+		var parts = dateStr.split(" ");
+		if (parts.length === 2) {
+			var dateParts = parts[0].split("-");
+			var timeParts = parts[1].split(":");
+			
+			if (dateParts.length === 3 && timeParts.length === 3) {
+				// Format: YYYY-MM-DD HH:MM:SS
+				var year = parseInt(dateParts[0]);
+				var month = parseInt(dateParts[1]) - 1; // JavaScript months are 0-indexed
+				var day = parseInt(dateParts[2]);
+				var hour = parseInt(timeParts[0]);
+				var minute = parseInt(timeParts[1]);
+				var second = parseInt(timeParts[2]);
+				
+				// Parse as UTC since server is in GMT
+				return new Date(Date.UTC(year, month, day, hour, minute, second));
+			}
+		}
+	}
+
+	// Legacy format: DD-MM-YYYY_HH:MM:SS
 	var parts = dateStr.split("_");
 	if (parts.length !== 2) return new Date(0);
 
