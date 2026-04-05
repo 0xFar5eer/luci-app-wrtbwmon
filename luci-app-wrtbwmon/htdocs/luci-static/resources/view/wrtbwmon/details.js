@@ -275,8 +275,48 @@ function loadCss(path) {
 
 function parseDatabase(raw, hosts, showZero, hideMACs) {
 	var values = [],
-	    totals = [0, 0, 0, 0, 0],
-	    rows = raw.trim().split(/\r?\n|\r/g),
+	    totals = [0, 0, 0, 0, 0];
+
+	// Handle JSON data from SQLite backend (Phase 13)
+	if (Array.isArray(raw)) {
+		// raw is already a JSON array from get_db_raw/get_current_db
+		for (var i = 0; i < raw.length; i++) {
+			var entry = raw[i];
+			
+			// Skip if showZero is false and total is 0
+			if (!showZero && entry.total == 0) continue;
+			
+			// Skip if MAC is in hideMACs list
+			if (hideMACs.indexOf(entry.mac) >= 0) continue;
+			
+			// Update totals
+			totals[0] += parseInt(entry.download) || 0;
+			totals[1] += parseInt(entry.upload) || 0;
+			totals[2] += parseInt(entry.download) || 0;
+			totals[3] += parseInt(entry.upload) || 0;
+			totals[4] += parseInt(entry.total) || 0;
+			
+			// Build row: [ip, mac, download, upload, download, upload, total, first_date, last_date, hostname]
+			var hostname = entry.mac.toLowerCase() in hosts ? hosts[entry.mac.toLowerCase()] : '';
+			var row = [
+				entry.ip || '',
+				entry.mac || '',
+				entry.download || 0,
+				entry.upload || 0,
+				entry.download || 0,
+				entry.upload || 0,
+				entry.total || 0,
+				entry.first_date || '',
+				entry.last_date || '',
+				hostname
+			];
+			values.push(row);
+		}
+		return [values, totals];
+	}
+	
+	// Legacy CSV parsing (for backward compatibility)
+	var rows = raw.trim().split(/\r?\n|\r/g),
 	    rowIndex = [1, 0, 3, 4, 3, 4, 5, 6, 7, 9];
 
 	rows.shift();
